@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import CurrencyRow from './CurrencyRow';
 
-const BASE_URL = 'http://api.exchangeratesapi.io/v1/latest?access_key=8b366fac2d53d2d796199d1b9aa6949c'
+const BASE_URL = 'http://api.exchangeratesapi.io/v1/latest?access_key=c9448715e93c9a783bd54bb461f5205b'
 
 function App() {
   const [currencyOptions, setCurrencyOptions] = useState([])
@@ -26,7 +26,8 @@ function App() {
     .then(res => res.json())
     .then(data => {
       const firstCurrency = Object.keys(data.rates)[0]
-      setCurrencyOptions([data.base, ...Object.keys(data.rates)])
+      setCurrencyOptions([...Object.keys(data.rates)])
+      console.log(data)
       setFromCurrency(data.base)
       setToCurrency(firstCurrency)
       setExchangeRate(data.rates[firstCurrency])
@@ -34,8 +35,8 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if(fromCurrency === toCurrency && fromCurrency != null) {
-    fetch(`${BASE_URL}?base=${fromCurrency}&symbols=${toCurrency}`)
+    if(fromCurrency !== null && toCurrency != null) {
+    fetch(`${BASE_URL}&base=${fromCurrency}&symbols=${toCurrency}`)
      .then(res => res.json())
      .then(data => setExchangeRate(data.rates[toCurrency]))
     }
